@@ -1,7 +1,7 @@
 # apputli
 
 [Blog](https://chail.me)
---[![Build Status](https://img.shields.io/travis/junicorn/conf.svg?style=flat-square)](https://travis-ci.org/junicorn/conf)
+
 Java 的一些常用工具积累
 
 
@@ -30,7 +30,7 @@ Java 的一些常用工具积累
 
 ```
 
-```
+
 
 
 
