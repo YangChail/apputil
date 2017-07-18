@@ -42,6 +42,11 @@
 			<version>1.7.7</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.belerweb</groupId>
+			<artifactId>pinyin4j</artifactId>
+			<version>2.5.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>
