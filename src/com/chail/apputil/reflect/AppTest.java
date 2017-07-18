@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 /**
- * 反射获取变量
+ * 鍙嶅皠鑾峰彇鍙橀噺
  * @author yangc
  *
  */
