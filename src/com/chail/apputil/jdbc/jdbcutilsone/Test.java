@@ -1,9 +1,5 @@
 package com.chail.apputil.jdbc.jdbcutilsone;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 public class Test {
 	public static void main(String[] args) {
 		// String sql = "select *from city where countryCode = ?";
