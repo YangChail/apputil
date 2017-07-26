@@ -26,19 +26,21 @@ import java.lang.reflect.Field;
  * @version 1.0.0
  */
 public class JDBCUtil {
+	
 	//数据库地址 dataBaseName替换为数据库名称
-	public static final String url = "jdbc:mysql://localhost/dataBaseName?useSSL=false&characterEncoding=utf8";
-	//驱动信息
-	public static final String driver = "com.mysql.jdbc.Driver";
+	private   String url = "";
 	//用户名 userName为数据库用户名
-	public static final String user = "userName";
+	private   String user = "";
 	//密码 password为数据库密码
-	public static final String password = "password";
+	private   String password = "";
 	private Connection conn = null;
 	private PreparedStatement pstm = null;
 	private ResultSet rs = null;
 		
-	public JDBCUtil() {
+	public JDBCUtil(String url,String driver,String user,String pass) {
+		this.password=pass;
+		this.user=user;
+		this.url=url;
 		//加载数据库驱动程序
 		try {
 			Class.forName(driver);

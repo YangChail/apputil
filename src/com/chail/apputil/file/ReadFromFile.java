@@ -9,6 +9,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
 import java.io.Reader;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ReadFromFile {
     /**
@@ -53,6 +55,9 @@ public class ReadFromFile {
         }
     }
 
+    
+    
+    
     /**
      * 以字符为单位读取文件，常用于读文本，数字等类型的文件
      */
@@ -114,19 +119,18 @@ public class ReadFromFile {
     /**
      * 以行为单位读取文件，常用于读面向行的格式化文件
      */
-    public static void readFileByLines(String fileName) {
+    public static List<String> readFileByLines(String fileName) {
         File file = new File(fileName);
+        List<String> list=new ArrayList<String>();
         BufferedReader reader = null;
         try {
             System.out.println("以行为单位读取文件内容，一次读一整行：");
             reader = new BufferedReader(new FileReader(file));
             String tempString = null;
-            int line = 1;
             // 一次读入一行，直到读入null为文件结束
             while ((tempString = reader.readLine()) != null) {
                 // 显示行号
-                System.out.println("line " + line + ": " + tempString);
-                line++;
+            	list.add(tempString);
             }
             reader.close();
         } catch (IOException e) {
@@ -139,6 +143,7 @@ public class ReadFromFile {
                 }
             }
         }
+        return list;
     }
 
     /**
