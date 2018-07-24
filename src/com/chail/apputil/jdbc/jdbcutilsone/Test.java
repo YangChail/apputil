@@ -12,7 +12,7 @@ public class Test {
 		jdbcUtil.getConnection();
 		String sql = "select *from city where countryCode = ?";
 		jdbcUtil.executeQuery(sql, null);
-		 jdbcUtil.releaseConnectn();
+		jdbcUtil.releaseConnectn();
 	}
 	
 }
