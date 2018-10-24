@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -47,31 +49,16 @@ public class HiveJdbc {
 	
 	
 	private static void copytab() throws Exception {
-		String sql="create table many_tab.tb_";
-		String sql2=" as select * from ";
+		String sql="create table many_tab.tb_?  as select * from many_tab.tb_0001";
 		List<String> list=new ArrayList<String>();
-		int j=0;
+		int j=1;
 		for(int i=105;i<10000;i++) {
-			String sqlaa=sql+ String.format("%05d", i)+sql2;
-			String to="";
-			if(j==0) {
-				to="many_tab.tb_00011";
-			}
-			if(j==1) {
-				to="many_tab.tb_00012";
-			}
-			if(j==2) {
-				to="many_tab.tb_00013";
-			}
-			if(j==3) {
-				to="many_tab.tb_00014";
-			}
-			if(j==4) {
-				to="many_tab.tb_00015";
-				j=-1;
+			String sqlaa=String.format("%05d", i);
+			list.add(sql.replace("?", sqlaa)+j);
+			if(j==5) {
+				j=0;
 			}
 			j++;
-			list.add(sqlaa+to);
 		}
 	    LinkedBlockingQueue<Runnable> queue= new LinkedBlockingQueue<Runnable>();
 	    ExecutorService pool =getPoll(2,queue);
@@ -92,29 +79,43 @@ public class HiveJdbc {
 	
 	
 	
-	public static void insertPartiton() {
+	public static void insertPartiton() throws InterruptedException {
 		LinkedBlockingQueue<Runnable> queue= new LinkedBlockingQueue<Runnable>();
-	    ExecutorService pool =getPoll(2,queue);
+	    ExecutorService pool =getPoll(3,queue);
 		Calendar c = Calendar.getInstance();
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
 		String sql="insert into  many_part.big_part partition(dt='?') select * from many_tab.tb_0020";
 		List<String> list=new ArrayList<String>();
-		for(int i=0;i<1000;i++) {
+		c .add(Calendar.DATE, 50);
+		for(int i=1;i<1000;i++) {
 			c .add(Calendar.DATE, 1);
 			String date=sdf.format(c.getTime());
 			if(i%2==0) {
 				list.add(sql.replace("?", date)+"1");
+			}else {
 				list.add(sql.replace("?", date)+"2");
 			}
+			
 		}
+		BlockingQueue<JDBCUtil> conPoll = getConPoll(4);
+		
 		for (String sqls : list) {
 			pool.execute(() -> {
 				System.out.println(sqls);
-				JDBCUtil jdbcUtil = getJdbc();
-				jdbcUtil.getConnection();
-				jdbcUtil.executeUpdate(sqls);
-				//
-				jdbcUtil.releaseConnectn();
+				JDBCUtil jdbcUtil = null;
+				try {
+					jdbcUtil = conPoll.take();
+					jdbcUtil.executeUpdate(sqls);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}finally {
+					try {
+						conPoll.put(jdbcUtil);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				
 			});
 		}
 		
@@ -151,6 +152,16 @@ public class HiveJdbc {
 		    
 	}
 	
+	
+	public static BlockingQueue<JDBCUtil> getConPoll(int size) throws InterruptedException {
+		 BlockingQueue<JDBCUtil> basket = new ArrayBlockingQueue<JDBCUtil>(size);
+		 for(int i=0;i<size;i++) {
+			 JDBCUtil jdbc = getJdbc();
+			 jdbc.getConnection();
+			 basket.put(jdbc);
+		 }
+		return basket;
+	}
 	
 	
 	
