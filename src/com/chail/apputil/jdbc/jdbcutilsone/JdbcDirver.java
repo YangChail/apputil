@@ -6,4 +6,7 @@ public class JdbcDirver {
 	
 	public final static  String HIVE_DRIVER="org.apache.hive.jdbc.HiveDriver";
 	
+	public final static  String MYSQL_DRIVER="com.mysql.jdbc.Driver";
+	
+	
 }

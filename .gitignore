@@ -1,2 +1,6 @@
 /bin/
 /target/
+/.dbeaver
+/.metadata
+/logs/*.log
+/.settings

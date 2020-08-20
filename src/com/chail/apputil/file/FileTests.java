@@ -1,4 +1,4 @@
-package test;
+package com.chail.apputil.file;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -9,7 +9,6 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import com.chail.apputil.file.ReadFromFile;
 import com.chail.apputil.jdbc.jdbcutilsone.JDBCUtil;
 
 public class FileTests {
